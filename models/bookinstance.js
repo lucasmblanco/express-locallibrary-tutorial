@@ -1,10 +1,11 @@
 const mongoose = require("mongoose"); 
+const { DateTime } = require("luxon")
 const Schema = mongoose.Schema; 
 
 const BookInstanceSchema = new Schema({
     book: {
         type: Schema.Types.ObjectId, 
-        ref: "title", 
+        ref: "Book", 
         required: true, 
     },
     imprint: {
@@ -18,14 +19,18 @@ const BookInstanceSchema = new Schema({
         default: "Maintenance",
     }, 
     due_back: {
-        type: Number,
+        type: Date,
         default: Date.now
     }
 
 })
 
-BookInstanceSchema.virtual("url").get(() => {
-    return `./catalog/bookinstance/${this._id}`
+BookInstanceSchema.virtual("url").get(function(){
+    return `/catalog/bookinstance/${this._id}`
+})
+
+BookInstanceSchema.virtual("due_date_formatted").get(function () {
+    return DateTime.fromJSDate(this.due_back).toLocaleString(DateTime.DATA_MED)
 })
 
 //module.exports = mongoose.model('Book', BookInstanceSchema); 
