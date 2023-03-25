@@ -29,7 +29,7 @@ const BookSchema = new Schema({
 })
 
 BookSchema.virtual("url").get(function(){
-    return `/catalog/books/${this._id}`
+    return `/catalog/book/${this._id}`
 })
 
 

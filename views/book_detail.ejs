@@ -1,0 +1,47 @@
+<%- include('layout.ejs') %>
+
+<h1>Title: <%= book.title %></h1>
+<p>
+  <strong>Author: </strong>
+  <a href="<%= book.author.url %>"><%= book.author.name%></a>
+</p>
+<p>
+  <strong>Sumary: </strong>
+  <%= book.summary %>
+</p>
+<p>
+  <strong>ISBN: </strong>
+  <%= book.isbn %>
+</p>
+<p>
+  <strong>Genre: </strong>
+  <% if(book.genre.length > 0) { %> <% book.genre.forEach((genre, index) => { %>
+  <a href="<%= genre.url %>">
+    <%= genre.name %> 
+    <% if(index < book.genre.length - 1) {%>, <%} %>
+  </a>
+  <% }) %> <%} else {%>
+<p>Not genres found</p>
+<% } %>
+</p>
+<div style="margin-left:20px;margin-top:20px">
+  <h4>Copies</h4>
+  <% if(book_instances.length > 0) { %>
+  <% book_instances.forEach(instance => { %>
+  <hr>
+  <% if(instance.status === 'Available') { %>
+  <span class="text-sucess"><% instance.status %></span>
+  <% } else if(instance.status === 'Mainenance') {%> 
+    <span class="text-danger"><% instance.status %></span>
+    <% } else {%>
+        <span class="text-warning"><% instance.status %></span>
+    <% } %>
+    <% if(instance.status !== 'Available') { %>
+        <p><strong>Due back: <%= instance.due_date_formatted%></strong></p>
+    <%} %>
+    <p><strong>Id: </strong><a href="<%= instance.url%>"><%= instance._id %></a></p>
+  <% }) %>
+  <% } else {%>
+    <p>There are no copies of this book in the library.</p>
+  <%} %>
+</div>

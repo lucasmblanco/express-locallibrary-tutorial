@@ -12,8 +12,21 @@ const bookInstanceList = (req, res, next) => {
   })
 };
 
-const bookInstanceDetail= (req, res) => {
-  res.send(`NOT IMPLEMENTED: BookInstance detail: ${req.params.id}`);
+const bookInstanceDetail= (req, res, next) => {
+  BookInstance.findById(req.params.id) 
+    .populate("book")
+    .exec((err, bookinstance) => {
+      if (err) return next(err); 
+      if (bookinstance === null) {
+        const err = new Error("Book copy not found"); 
+        err.status = 404; 
+        return next(err); 
+      }
+      res.render("bookinstance_detail", {
+        title: `Copy: ${bookinstance.book.title}`,
+       bookinstance
+      })
+  })
 };
 
 const bookInstanceCreateGet = (req, res) => {
