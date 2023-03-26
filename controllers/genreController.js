@@ -1,8 +1,9 @@
 const Book = require("../models/book");
-const Author = require("../models/author");
+//const Author = require("../models/author");
 const Genre = require("../models/genre");
-const BookInstance = require("../models/bookinstance");
+//const BookInstance = require("../models/bookinstance");
 const async = require("async"); 
+const { body, validationResult } = require("express-validator"); 
 
 
 const genreList = (req, res, next) => {
@@ -42,12 +43,42 @@ const genreDetail = (req, res, next) => {
 };
 
 const genreCreateGet = (req, res) => {
-  res.send("NOT IMPLEMENTED: Genre create GET");
+  res.render("genre_form", {
+    title: "Create genre",
+    errors: false
+  })
 };
 
-const genreCreatePost = (req, res) => {
-  res.send("NOT IMPLEMENTED: Genre create POST");
-};
+const genreCreatePost = [
+  body("name", "Genre name required").trim().isLength({ min: 1 }).escape(), // Validate and sanitize the name field.
+  (req, res, next) => { // Process request after validation and sanitization.
+    const errors = validationResult(req);
+    const genre = new Genre({ name: req.body.name }); // Extract the validation errors from a request.
+    if (!errors.isEmpty()) {
+      res.render("genre_form", {
+        title: "Create genre",
+        genre,
+        errors: errors.array(),
+      });
+      return; 
+
+    } else {
+      Genre.findOne({ name: req.body.name })
+        .exec((err, found_genre) => {
+          if (err) return next(err); 
+          if (found_genre) {
+            res.redirect(found_genre.url)
+          } else {
+            genre.save(err => {
+              if (err) return next(err); 
+              res.redirect(genre.url); 
+            })
+          }
+      })
+    }
+  }
+
+];
 
 const genreDeleteGet = (req, res) => {
   res.send("NOT IMPLEMENTED: Genre delete GET");
