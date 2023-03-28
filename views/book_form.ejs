@@ -1,0 +1,50 @@
+<%- include("layout.ejs") %>
+
+<h1><%= title %></h1>
+<form method="POST" action="">
+    <div class="form-group">
+        <label for="title">Title:</label>
+        <input type="text" id="title" class="form-control" placeholder="Name of book" name="title" required="true" value="<% typeof(book) !== undefined ? book.title : '' %>">
+    </div>
+    <div class="form-group">
+        <label for="author">Author:</label>
+        <select id="author" class="form-control" type="select" placeholder="Select author" name="author" required>
+          <% authors.sort(function(a, b) {let textA = a.family_name.toUpperCase(); let textB = b.family_name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;}); %>
+          <% for (let author of authors) { %>
+            <% if (book) { %>
+              <option value="<%= author._id %>" <% if (author._id.toString() === book.author._id.toString()) { %> selected <% } %>><%= author.name %></option>
+            <% } else { %>
+              <option value="<%= author._id %>"><%= author.name %></option>
+            <% } %>
+          <% } %>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="summary">Summary</label>
+        <textarea name="summary" id="summary" cols="30" rows="10" class="form-control" placeholder="Summary" required="true"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="isbn">ISBN: </label>
+        <input type="text" id="isbn" class="form-control" placeholder="ISBN13" name="isbn" value="<% typeof(book) !== undefined ? book.isbn : '' %>" required="true">
+      </div>
+      <div class="form-group">
+        <label>Genre: </label>
+        <div>
+            <% for(const genre of genres) { %>
+                <div style="display: inline; padding-right:10px;">
+                    <input id="<%= genre._id %>" value="<%= genre._id %>" type="checkbox" class="checkbox-input" name="genre">
+                    <label for="<%= genre._id %>"><%= genre.name %></label>
+                </div>
+            <% } %>
+        </div>
+      </div>
+      <button class="btn btn-primary" type="submit">Submit</button>
+</form>
+
+<% if(errors.length > 0) { %>
+    <ul>
+        <% errors.forEach(error => { %> 
+            <li><%= error.msg%></li>
+        <% }) %>
+    </ul>
+<% } %>

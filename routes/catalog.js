@@ -18,7 +18,7 @@ router.post("/book/create", bookController.bookCreatePost);
 
 router.get("/book/:id/delete", bookController.bookDeleteGet);
 
-router.post("/book/:id/delete",bookController.bookdeletePost);
+router.post("/book/:id/delete",bookController.bookDeletePost);
 
 router.get("/book/:id/update", bookController.bookUpdateGet);
 
