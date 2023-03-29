@@ -1,0 +1,40 @@
+<%- include("layout.ejs")%>
+
+<h1><%= title %></h1>
+<form method="POST" action="">
+    <div class="form-group">
+        <label for="book">Book:</label>
+        <select type="select"  id="book" class="form-control" placeholder="Select book" name="book" required="true">
+            <% book_list.sort(function(a,b){let textA = a.title.toUpperCase(); let textB = b.title.toUpperCase(); return (textA < textB ? -1 : (textA > textB) ? 1 : 0)})%>
+            <% for (const book of book_list) { %>
+                <option value="<%= book._id%> " selected="<% selected_book === book._id.toString() ? 'selected' : false %>"><%= book.title%></option>
+            <% } %>
+        </select>
+    </div>
+        <div class="form-group">
+            <label for="imprint">Imprint: </label>
+            <input type="text" id="imprint" class="form-control" placeholder="Publisher and date information" name="imprint" required="true" value="<% typeof(bookinstance)!== undefined ? bookinstance.imprint : '' %>">
+        </div>
+        <div class="form-group">
+            <label for="due_back">Date when book available: </label>
+            <input type="date" id="due_back" class="form-control" name="due_back" value="<% typeof bookinstance !== undefined ? bookinstance.due_back : '' %>">
+        </div>
+        <div class="form-group">
+            <label for="status">Status: </label>
+            <select type="select" name="status" id="status" class="form-control" placeholder="Select status" required="true">
+                <option value="Maintenance">Maintenance</option>
+                <option value="Available">Available</option>
+                <option value="Loaned">Loaned</option>
+                <option value="Reserved">Reserved</option>
+            </select>
+        </div>
+        <button class="btn btn-primary" type="submit">Submit</button>
+    </div>
+</form>
+<% if(errors.length > 0) { %>
+    <ul>
+        <% errors.forEach(error => { %> 
+            <li><%= error.msg%></li>
+        <% }) %>
+    </ul>
+<% } %>
