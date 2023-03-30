@@ -90,12 +90,28 @@ const bookInstanceCreatePost = [
   }
 ];
 
-const bookInstanceDeleteGet = (req, res) => {
-  res.send("NOT IMPLEMENTED: BookInstance delete GET");
+const bookInstanceDeleteGet = (req, res, next) => {
+  BookInstance.findById(req.params.id)
+    .populate("book")
+    .exec((err, bookinstance) => {
+      if (err) return next(err); 
+      res.render("bookinstance_delete", {
+        title: "Delete Instance", 
+        bookinstance: bookinstance
+      })
+  })
 };
 
-const bookInstanceDeletePost = (req, res) => {
-  res.send("NOT IMPLEMENTED: BookInstance delete POST");
+const bookInstanceDeletePost = (req, res, next) => {
+  BookInstance.findById(req.body.bookinstanceid)
+  .populate("book")
+  .exec((err, bookinstance) => {
+    if (err) return next(err); 
+    BookInstance.findByIdAndRemove(req.body.bookinstanceid, (err) => {
+      if (err) return next(err); 
+      res.redirect('/catalog/bookinstances')
+    })
+})
 };
 
 const bookInstanceUpdateGet = (req, res) => {

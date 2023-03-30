@@ -1,9 +1,8 @@
 <%- include("layout.ejs") %>
-
-<h1>ID: <%= bookinstance._id %></h1>
+<h1><%= title %></h1>
 <p>
-  <strong>Title:</strong>
-  <a href="<%= bookinstance.book.url %>"><%= bookinstance.book.title %></a>
+    <strong>Title:</strong>
+    <a href="<%= bookinstance.book.url %>"><%= bookinstance.book.title %></a>
 </p>
 <p><strong>Imprint:</strong> <%= bookinstance.imprint %></p>
 <p>
@@ -19,7 +18,10 @@
     <p><strong>Due back:</strong> <%= bookinstance.due_date_formatted %></p>
     <% } %>
 </p>
-<hr>
-<p>
-    <a href="<%= `${bookinstance.url}/delete` %>">Delete instance</a>
-</p>
+<p>Do you really want to delete this Instance?</p>
+<form method="POST" action="">
+    <div class="form-group">
+        <input type="hidden" name="bookinstanceid" required="true" value="<%= bookinstance._id %>" id="bookinstanceid" class="form-control">
+        <button class="btn btn-primary" type="submit">Delete</button>
+    </div>
+</form>
