@@ -15,7 +15,7 @@ var app = express();
 
 // --- mongoDB setup ---
 mongoose.set('strictQuery', false);
-const mongoDB = process.env.MONGODB_URI
+const mongoDB = process.env.MONGO_URL || dev_db_url;
 
 main().catch(err => console.log(err)); 
 
