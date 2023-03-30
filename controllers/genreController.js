@@ -129,13 +129,50 @@ const genreDeletePost = (req, res, next) => {
   )
 };
 
-const genreUpdateGet = (req, res) => {
-  res.send("NOT IMPLEMENTED: Genre update GET");
+const genreUpdateGet = (req, res, next) => {
+  Genre.findById(req.params.id)
+    .exec((err, genre) => {
+      if (err) return next(err); 
+      res.render("genre_form", {
+        title: "Update genre",
+        genre,
+        errors: false
+      })
+  })
 };
 
-const genreUpdatePost = (req, res) => {
-  res.send("NOT IMPLEMENTED: Genre update POST");
-};
+const genreUpdatePost = [
+  body("name", "Genre name required").trim().isLength({ min: 1 }).escape(), // Validate and sanitize the name field.
+  (req, res, next) => { // Process request after validation and sanitization.
+    const errors = validationResult(req);
+    const genre = new Genre({
+      name: req.body.name,
+      _id: req.params.id, 
+    });
+    if (!errors.isEmpty()) {
+      res.render("genre_form", {
+        title: "Create genre",
+        genre,
+        errors: errors.array(),
+      });
+      return; 
+    } else {
+      Genre.findOne({ name: req.body.name })
+        .exec((err, found_genre) => {
+          if (err) return next(err); 
+          if (found_genre) {
+            res.redirect(found_genre.url)
+          } else {
+            Genre.findByIdAndUpdate(req.params.id, genre, {},(err, genreupdated) => {
+              if (err) return next(err); 
+              res.redirect(genreupdated.url); 
+            })
+          }
+      })
+    }
+  }
+
+];
 
 module.exports = {
     genreList,

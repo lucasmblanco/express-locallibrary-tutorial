@@ -1,6 +1,7 @@
 <%- include("layout.ejs") %> 
 
-<h1><%= title %></h1>
+<div>
+    <h1><%= title %></h1>
 
 <p><%= author.lifespan %></p>
 <% if(author_books.length > 0) {%>
@@ -25,3 +26,4 @@
         </div>
     </form>
     <% } %>
+</div>

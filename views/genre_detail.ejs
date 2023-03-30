@@ -1,6 +1,7 @@
 <%- include("layout.ejs") %>
 
-<h1><%= genre.name %></h1>
+<div>
+    <h1><%= genre.name %></h1>
 <div style="margin-left:20px;margin-top:20px">
     <h4>Books</h4>
     <dl>
@@ -20,3 +21,7 @@
 <p>
     <a href="<%= `${genre.url}/delete` %>">Delete genre</a>
 </p>
+<p>
+    <a href="<%= `${genre.url}/update` %>">Update genre</a>
+  </p>
+</div>

@@ -115,12 +115,67 @@ const bookInstanceDeletePost = (req, res, next) => {
 };
 
 const bookInstanceUpdateGet = (req, res) => {
-  res.send("NOT IMPLEMENTED: BookInstance update GET");
+  BookInstance.findById(req.params.id)
+    .populate("book")
+    .exec((err, instance) => {
+      console.log(instance.due_date_isodate)
+    if (err) return next(err); 
+      res.render("bookinstance_form", {
+      title: "Update Instance Book", 
+      book_list: instance.book ,
+      selected_book: instance.book,
+      errors: [],
+      bookinstance: instance
+    })
+})
 };
 
-const bookInstanceUpdatePost = (req, res) => {
-  res.send("NOT IMPLEMENTED: BookInstance update POST");
-};
+const bookInstanceUpdatePost = [
+  body("book", "Book must be specified")
+    .trim()
+    .isLength({ min: 1})
+    .escape(),
+  body("imprint", "Imprint must be specified")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("status", "Status is empty").escape(),
+  body("due_back", "Invalid date")
+    .optional({ checkFalsy: true })
+    .isISO8601()
+    .toDate(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    const bookinstance = new BookInstance({
+      book: req.body.book,
+      imprint: req.body.imprint,
+      status: req.body.status,
+      due_back: req.body.due_back,
+      _id: req.params.id,
+    }); 
+    if (!errors.isEmpty()) {
+      BookInstance.findById(req.params.id)
+    .populate("book")
+    .exec((err, instance) => {
+      console.log(instance.due_date_isodate)
+    if (err) return next(err); 
+      res.render("bookinstance_form", {
+      title: "Update Instance Book", 
+      book_list: instance.book ,
+      selected_book: instance.book,
+      errors: errors.array(),
+      bookinstance: instance
+    })
+    }) 
+      return;
+    }
+    BookInstance.findByIdAndUpdate(req.params.id, bookinstance, {}, (err, instanceupdated) => {
+      if (err) return next(err); 
+      res.redirect(instanceupdated.url); 
+    })
+
+  }
+];
 
 module.exports = {
     bookInstanceList,

@@ -1,5 +1,6 @@
 <%- include("layout.ejs") %>
-<h1><%= title %></h1>
+<div>
+  <h1><%= title %></h1>
 <h4><%= genre.name %></h4>
 <% if(genre_books.length > 0) { %>
 <p>
@@ -24,3 +25,4 @@
   </div>
 </form>
 <% } %>
+</div>

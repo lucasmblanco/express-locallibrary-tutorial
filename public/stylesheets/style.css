@@ -1,6 +1,7 @@
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  display: flex;
 }
 
 a {
@@ -12,3 +13,4 @@ a {
   padding: 0;
   list-style: none;
 }
+

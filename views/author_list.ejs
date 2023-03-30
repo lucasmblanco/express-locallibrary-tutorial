@@ -1,6 +1,7 @@
 <%- include("layout.ejs") %>
 
-<h1> <%= title %> </h1>
+<div>
+  <h1> <%= title %> </h1>
 <ul>
   <% if(author_list.length > 0) { %>
   <% author_list.forEach(author => {  %>
@@ -10,3 +11,4 @@
   <li>There are no authors.</li>
   <% } %>
 </ul>
+</div>

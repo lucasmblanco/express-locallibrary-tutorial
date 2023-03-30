@@ -1,6 +1,7 @@
 <%- include('layout.ejs') %> 
 
-<h1>Author: <%= author.name %> </h1>
+<div>
+    <h1>Author: <%= author.name %> </h1>
 <p><%= author.date_of_birth_formatted%> - <%= author.date_of_death_formatted%></p>
 <div style="margin-left:20px;margin-top:20px">
     <h4>Books</h4>
@@ -24,3 +25,4 @@
 <p>
     <a href="<%= `${author.url}/update` %>">Update author</a>
   </p>
+</div>
