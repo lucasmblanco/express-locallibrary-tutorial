@@ -9,7 +9,7 @@
             <% if (book_list.length > 1 ) {%>
                 <% book_list.sort(function(a,b){let textA = a.title.toUpperCase(); let textB = b.title.toUpperCase(); return (textA < textB ? -1 : (textA > textB) ? 1 : 0)})%>
             <% for (const book of book_list) { %>
-                <option value="<%= book._id%> " selected="<% selected_book === book._id.toString() ? 'selected' : false %>"><%= book.title%></option>
+                <option value="<%= book._id%>" <% selected_book === book._id.toString() ? 'selected' : '' %> ><%= book.title%></option>
             <% } %>
             <%} else {%> 
                 <option value="<%= book_list._id%> " selected="selected"><%= book_list.title%></option>
